@@ -1,0 +1,15 @@
+npm install -g eas-cli
+eas login
+eas build --profile preview --platform android
+
+npx expo prebuild --platform android
+cd android
+.\gradlew assembleRelease
+.\gradlew release
+.\gradlew stop
+.\gradlew clean
+
+/android/build.gradle
+ext {
+    ndkVersion = "30.0.14904198"
+}
