@@ -1,8 +1,14 @@
-import { create } from "zustand";
+﻿import { create } from 'zustand';
 
-type Session = {
-  user: { id: string; email: string; firstname: string; lastname: string };
+type User = {
+  id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  role: string;
 };
+
+type Session = { user: User };
 
 type AuthStore = {
   session: Session | null;

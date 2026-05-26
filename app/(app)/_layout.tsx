@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
-import { Home } from "lucide-react-native";
 import { useThemeColor } from "heroui-native";
+import { getTabsForRole } from "@/navigation/tabs.config";
+import { useAuthStore } from "@/store";
 
 export default function AppLayout() {
   const [background, border, accent, muted] = useThemeColor([
@@ -9,6 +10,9 @@ export default function AppLayout() {
     "accent",
     "muted",
   ]);
+
+  const role = useAuthStore((s) => s.session?.user.role ?? "user");
+  const tabs = getTabsForRole(role);
 
   return (
     <Tabs
@@ -24,13 +28,38 @@ export default function AppLayout() {
         tabBarInactiveTintColor: muted,
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
-        }}
-      />
+      {tabs.map((tab) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.label,
+            tabBarIcon: ({ color, size }) => (
+              <tab.Icon color={color} size={size} />
+            ),
+          }}
+        />
+      ))}
+
+      {/* Role-specific screens hidden for non-matching roles */}
+      {role !== "admin" && (
+        <Tabs.Screen name="admin" options={{ href: null }} />
+      )}
+      {role !== "moderator" && (
+        <Tabs.Screen name="reports" options={{ href: null }} />
+      )}
+      {role !== "user" && (
+        <>
+          <Tabs.Screen name="explore" options={{ href: null }} />
+          <Tabs.Screen name="notifications" options={{ href: null }} />
+          <Tabs.Screen name="activity" options={{ href: null }} />
+        </>
+      )}
+
+      {/* Accessible but not in tab bar */}
+      <Tabs.Screen name="profile" options={{ href: null }} />
+      <Tabs.Screen name="settings" options={{ href: null }} />
+      <Tabs.Screen name="about" options={{ href: null }} />
     </Tabs>
   );
 }

@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "expo-router";
-import * as SecureStore from "expo-secure-store";
+import { useFocusEffect, useRouter } from "expo-router";
 import {
   Button,
   Card,
@@ -10,22 +9,24 @@ import {
   Spinner,
   TextField,
 } from "heroui-native";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
+  BackHandler,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   Text,
   View,
 } from "react-native";
 import { z } from "zod";
 
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Screen } from "@/components/ui/Screen";
-import { useAuthStore } from "@/store/auth.store";
-
-const TOKEN_KEY = "auth_token";
+import { AccountLockedError } from "@/features/auth";
+import { useSignIn } from "@/features/auth/mutations";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -36,10 +37,20 @@ type SignInForm = z.infer<typeof schema>;
 
 export default function SignInScreen() {
   const router = useRouter();
-  const { setAuth } = useAuthStore();
   const [serverError, setServerError] = useState<string | null>(null);
   const [pingResult, setPingResult] = useState<string | null>(null);
   const [pinging, setPinging] = useState(false);
+  const signIn = useSignIn();
+
+  useFocusEffect(
+    useCallback(() => {
+      const handler = BackHandler.addEventListener("hardwareBackPress", () => {
+        BackHandler.exitApp();
+        return true;
+      });
+      return () => handler.remove();
+    }, [])
+  );
 
   const ping = async () => {
     setPinging(true);
@@ -76,34 +87,19 @@ export default function SignInScreen() {
   const onSubmit = async (data: SignInForm) => {
     setServerError(null);
     try {
-      const res = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL}/api/auth/sign-in/email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Origin: process.env.EXPO_PUBLIC_API_URL!,
-          },
-          body: JSON.stringify({ email: data.email, password: data.password }),
-        }
-      );
-
-      if (!res.ok) {
-        const body = await res.text().catch(() => "");
-        setServerError(`${res.status}: ${body || "Invalid email or password."}`);
-        return;
+      await signIn.mutateAsync({ email: data.email, password: data.password });
+      // AuthGate detects session and redirects
+    } catch (err) {
+      if (err instanceof AccountLockedError) {
+        router.replace({
+          pathname: "/(auth)/account-locked",
+          params: { reason: err.reason ?? "" },
+        });
+      } else {
+        setServerError(
+          err instanceof Error ? err.message : "Something went wrong. Please try again."
+        );
       }
-
-      const { token, user } = await res.json();
-      if (!token) {
-        setServerError("Sign-in failed: no token in response.");
-        return;
-      }
-      await SecureStore.setItemAsync(TOKEN_KEY, token);
-      setAuth({ user }, token);
-      router.replace("/");
-    } catch {
-      setServerError("Something went wrong. Please try again.");
     }
   };
 
@@ -171,9 +167,8 @@ export default function SignInScreen() {
                   control={control}
                   name="password"
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
+                    <PasswordInput
                       placeholder="••••••••"
-                      secureTextEntry
                       autoComplete="password"
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -186,6 +181,13 @@ export default function SignInScreen() {
                 )}
               </TextField>
 
+              <Pressable
+                onPress={() => router.push("/(auth)/forgot-password")}
+                className="self-end"
+              >
+                <Text className="text-sm text-accent">Forgot password?</Text>
+              </Pressable>
+
               {serverError && (
                 <Text className="text-sm text-danger text-center">
                   {serverError}
@@ -193,11 +195,11 @@ export default function SignInScreen() {
               )}
             </Card.Body>
 
-            <Card.Footer className="mt-4">
+            <Card.Footer className="flex-col gap-3 mt-4">
               <Button
                 variant="primary"
                 size="lg"
-                className="flex-1"
+                className="w-full"
                 isDisabled={isSubmitting}
                 onPress={handleSubmit(onSubmit)}
               >
@@ -207,46 +209,56 @@ export default function SignInScreen() {
                   <Button.Label>Sign in</Button.Label>
                 )}
               </Button>
+              <View className="flex-row justify-center gap-1">
+                <Text className="text-sm text-default-500">
+                  Don't have an account?
+                </Text>
+                <Pressable onPress={() => router.push("/(auth)/sign-up")}>
+                  <Text className="text-sm text-accent font-medium">Sign up</Text>
+                </Pressable>
+              </View>
             </Card.Footer>
           </Card>
 
-          {/* Dev: server ping */}
-          <Card variant="tertiary">
-            <Card.Header>
-              <Card.Title>Server ping</Card.Title>
-              <Card.Description>
-                {process.env.EXPO_PUBLIC_API_URL}
-              </Card.Description>
-            </Card.Header>
-            <Card.Footer className="mt-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex-1"
-                isDisabled={pinging}
-                onPress={ping}
-              >
-                {pinging ? (
-                  <ActivityIndicator size="small" />
-                ) : (
-                  <Button.Label>Ping server</Button.Label>
-                )}
-              </Button>
-            </Card.Footer>
-            {pingResult && (
-              <Card.Body>
-                <Text
-                  className={
-                    pingResult.startsWith("FAILED")
-                      ? "text-danger text-sm"
-                      : "text-success text-sm"
-                  }
+          {/* Dev: server ping — never ships in production */}
+          {__DEV__ && (
+            <Card variant="tertiary">
+              <Card.Header>
+                <Card.Title>Server ping</Card.Title>
+                <Card.Description>
+                  {process.env.EXPO_PUBLIC_API_URL}
+                </Card.Description>
+              </Card.Header>
+              <Card.Footer className="mt-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex-1"
+                  isDisabled={pinging}
+                  onPress={ping}
                 >
-                  {pingResult}
-                </Text>
-              </Card.Body>
-            )}
-          </Card>
+                  {pinging ? (
+                    <ActivityIndicator size="small" />
+                  ) : (
+                    <Button.Label>Ping server</Button.Label>
+                  )}
+                </Button>
+              </Card.Footer>
+              {pingResult && (
+                <Card.Body>
+                  <Text
+                    className={
+                      pingResult.startsWith("FAILED")
+                        ? "text-danger text-sm"
+                        : "text-success text-sm"
+                    }
+                  >
+                    {pingResult}
+                  </Text>
+                </Card.Body>
+              )}
+            </Card>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </Screen>
