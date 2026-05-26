@@ -1,4 +1,5 @@
 import { Tabs } from "expo-router";
+import { useThemeColor } from "heroui-native";
 import { Bell, Compass, Flag, Home, Plus, Shield, User } from "lucide-react-native";
 import { getTabsForRole } from "@/navigation/tabs.config";
 import { useAuthStore } from "@/store";
@@ -7,12 +8,14 @@ import { CustomTabBar } from "@/components/ui/CustomTabBar";
 export default function AppLayout() {
   const role = useAuthStore((s) => s.session?.user.role ?? "user");
   const visibleTabs = new Set(getTabsForRole(role).map((t) => t.name));
+  const [background] = useThemeColor(["background"]);
 
   const href = (name: string) => (visibleTabs.has(name) ? undefined : null);
 
   return (
     <Tabs
       screenOptions={{ headerShown: false }}
+      sceneContainerStyle={{ backgroundColor: background }}
       tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tabs.Screen

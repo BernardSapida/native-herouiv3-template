@@ -10,12 +10,7 @@ import {
 } from "heroui-native";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text } from "react-native";
 import { z } from "zod";
 
 import { AlertDialog } from "@/components/ui/AlertDialog";
@@ -64,7 +59,7 @@ export default function ChangePasswordScreen() {
       newPassword: data.newPassword,
     });
     if (!result) {
-      setServerError("Current password is incorrect or request failed.");
+      setServerError("Current password is incorrect.");
       return;
     }
     reset();

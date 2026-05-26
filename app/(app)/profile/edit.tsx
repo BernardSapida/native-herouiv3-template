@@ -57,7 +57,7 @@ export default function EditProfileScreen() {
         setServerError("Could not update profile. Try again.");
         return;
       }
-      setAuth({ user: { ...session!.user, ...result.user } }, token!);
+      setAuth({ user: { ...session!.user, ...data } }, token!);
       setShowSuccess(true);
     } catch {
       setServerError("Could not update profile. Try again.");

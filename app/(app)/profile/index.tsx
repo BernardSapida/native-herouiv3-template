@@ -1,7 +1,14 @@
 import { useRouter } from "expo-router";
-import { ChevronRight, KeyRound, Moon, Pencil, Sun, SunMoon, Trash2 } from "lucide-react-native";
-import { Button, Card } from "heroui-native";
-import { useThemeColor } from "heroui-native";
+import { Button, Card, useThemeColor } from "heroui-native";
+import {
+  ChevronRight,
+  KeyRound,
+  Moon,
+  Pencil,
+  Sun,
+  SunMoon,
+  Trash2,
+} from "lucide-react-native";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import { Screen } from "@/components/ui/Screen";
@@ -51,7 +58,12 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { session, clearAuth, token } = useAuthStore();
   const { theme, setTheme } = usePreferencesStore();
-  const [accent, muted, accentForeground, danger] = useThemeColor(["accent", "muted", "accent-foreground", "danger"]);
+  const [accent, muted, accentForeground, danger] = useThemeColor([
+    "accent",
+    "muted",
+    "accent-foreground",
+    "danger",
+  ]);
 
   const user = session?.user;
 
@@ -75,9 +87,7 @@ export default function ProfileScreen() {
           <Card.Body className="items-center gap-3 py-6">
             <View className="w-20 h-20 rounded-full bg-accent items-center justify-center">
               <Text className="text-accent-foreground text-2xl font-bold">
-                {user
-                  ? initials(user.firstname, user.lastname)
-                  : "?"}
+                {user ? initials(user.firstname, user.lastname) : "?"}
               </Text>
             </View>
             <View className="items-center gap-1">
@@ -134,10 +144,7 @@ export default function ProfileScreen() {
                     }}
                     className={active ? "" : "bg-default"}
                   >
-                    <Icon
-                      size={18}
-                      color={active ? accentForeground : muted}
-                    />
+                    <Icon size={18} color={active ? accentForeground : muted} />
                     <Text
                       style={{ color: active ? accentForeground : muted }}
                       className="text-xs font-medium"
@@ -153,7 +160,7 @@ export default function ProfileScreen() {
 
         {/* Sign out */}
         <Button
-          variant="danger-soft"
+          variant="danger"
           size="lg"
           className="w-full"
           onPress={handleSignOut}

@@ -7,7 +7,7 @@ import { useAuthStore } from "@/store";
 
 export default function HomeScreen() {
   const { session } = useAuthStore();
-const logout = useLogout();
+  const logout = useLogout();
 
   return (
     <Screen>
@@ -50,7 +50,7 @@ const logout = useLogout();
           </Card.Body>
           <Card.Footer className="mt-4">
             <Button
-              variant="danger-soft"
+              variant="danger"
               size="md"
               className="flex-1"
               onPress={logout}

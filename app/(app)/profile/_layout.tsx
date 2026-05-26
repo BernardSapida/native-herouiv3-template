@@ -1,12 +1,16 @@
 import { Stack } from "expo-router";
 import { useThemeColor } from "heroui-native";
+import { useColorScheme } from "react-native";
 
 export default function ProfileLayout() {
-  const [background, foreground, border] = useThemeColor([
-    "background",
-    "foreground",
-    "border",
-  ]);
+  const colorScheme = useColorScheme();
+  const [rawBg, rawFg] = useThemeColor(["background", "foreground"]);
+
+  const isDark = colorScheme === "dark";
+  const background =
+    rawBg && rawBg !== "invalid" ? rawBg : isDark ? "#18181b" : "#fafafa";
+  const foreground =
+    rawFg && rawFg !== "invalid" ? rawFg : isDark ? "#fafafa" : "#18181b";
 
   return (
     <Stack
@@ -14,6 +18,8 @@ export default function ProfileLayout() {
         headerStyle: { backgroundColor: background },
         headerTintColor: foreground,
         headerShadowVisible: false,
+        animation: "fade",
+        backgroundColor: background,
         contentStyle: { backgroundColor: background },
       }}
     >

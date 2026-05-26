@@ -7,7 +7,9 @@ import {
   BackHandler,
   Platform,
   Modal,
+  useColorScheme,
 } from "react-native";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -175,6 +177,14 @@ function RootDetectionRunner() {
 }
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
+  const { theme } = usePreferencesStore();
+  const isDark =
+    theme === "dark" || (theme === "system" && colorScheme === "dark");
+  const navigationTheme = isDark
+    ? { ...DarkTheme, colors: { ...DarkTheme.colors, background: "#18181b" } }
+    : { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: "#fafafa" } };
+
   const { setAuth, clearAuth } = useAuthStore();
   const {
     isOffline,
@@ -408,6 +418,7 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={navigationTheme}>
       <HeroUINativeProvider config={{ devInfo: { stylingPrinciples: false } }}>
         <QueryClientProvider client={queryClient}>
           <View style={{ flex: 1 }}>
@@ -429,6 +440,7 @@ export default function RootLayout() {
           </View>
         </QueryClientProvider>
       </HeroUINativeProvider>
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

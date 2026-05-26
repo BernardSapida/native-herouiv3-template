@@ -1,5 +1,6 @@
 import { Button, Dialog } from "heroui-native";
 import { View } from "react-native";
+import { useUniwind } from "uniwind";
 
 type AlertDialogVariant = "default" | "danger";
 
@@ -26,6 +27,10 @@ export function AlertDialog({
   onConfirm,
   showCancel = false,
 }: AlertDialogProps) {
+  // Subscribe to theme changes so the Portal children update when theme switches.
+  // Without this, dialogs rendered in FullWindowOverlay (iOS) stay on the old theme.
+  useUniwind();
+
   const handleConfirm = () => {
     onOpenChange(false);
     setTimeout(() => {
@@ -44,12 +49,15 @@ export function AlertDialog({
           isCloseOnPress={!showCancel}
           className="bg-black/50"
         />
-        <Dialog.Content isSwipeable={false} className="mx-6 rounded-2xl bg-background p-6 gap-3">
+        <Dialog.Content
+          isSwipeable={false}
+          className="mx-6 rounded-2xl bg-background p-6 gap-3"
+        >
           <Dialog.Title className="text-lg font-semibold text-foreground">
             {title}
           </Dialog.Title>
           {description && (
-            <Dialog.Description className="text-sm text-default-500 leading-5">
+            <Dialog.Description className="text-sm text-muted leading-5">
               {description}
             </Dialog.Description>
           )}
