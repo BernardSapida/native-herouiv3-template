@@ -64,7 +64,7 @@ export default function DeleteAccountScreen() {
   };
 
   return (
-    <Screen>
+    <Screen noTopInset>
       <AlertDialog
         isOpen={showConfirm}
         onOpenChange={setShowConfirm}
@@ -100,7 +100,7 @@ export default function DeleteAccountScreen() {
                 <Text className="text-sm font-semibold text-foreground mb-1">
                   This action is permanent
                 </Text>
-                <Text className="text-sm text-default-500 leading-5">
+                <Text className="text-sm text-muted leading-5">
                   Deleting your account removes all your data and cannot be
                   undone. Enter your password below to confirm.
                 </Text>

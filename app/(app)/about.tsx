@@ -33,14 +33,14 @@ export default function AboutScreen() {
       >
         {/* App info */}
         <View className="gap-3">
-          <Text className="text-xs font-semibold text-default-500 uppercase tracking-widest px-1">
+          <Text className="text-xs font-semibold text-muted uppercase tracking-widest px-1">
             App
           </Text>
           <Card>
             <Card.Body className="px-4 py-0">
               <View className="flex-row items-center justify-between py-4">
                 <Text className="text-base text-foreground">Version</Text>
-                <Text className="text-base text-default-500">{version}</Text>
+                <Text className="text-base text-muted">{version}</Text>
               </View>
             </Card.Body>
           </Card>
@@ -48,7 +48,7 @@ export default function AboutScreen() {
 
         {/* Legal */}
         <View className="gap-3">
-          <Text className="text-xs font-semibold text-default-500 uppercase tracking-widest px-1">
+          <Text className="text-xs font-semibold text-muted uppercase tracking-widest px-1">
             Legal
           </Text>
           <Card>

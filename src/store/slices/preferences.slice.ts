@@ -1,6 +1,6 @@
-﻿import { Appearance } from 'react-native';
-import { create } from 'zustand';
+﻿import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { Uniwind } from 'uniwind';
 import { zustandSecureStorage } from '@/lib/secure-store';
 
 export type Theme = 'light' | 'dark' | 'system';
@@ -29,7 +29,7 @@ export const usePreferencesStore = create<PreferencesStore>()(
       setHasSeenOnboarding: (value) => set({ hasSeenOnboarding: value }),
       setHasSeenNotificationPrimer: (value) => set({ hasSeenNotificationPrimer: value }),
       setTheme: (theme) => {
-        Appearance.setColorScheme(theme === 'system' ? null : theme);
+        Uniwind.setTheme(theme);
         set({ theme });
       },
       setLanguage: (language) => set({ language }),
@@ -46,8 +46,8 @@ export const usePreferencesStore = create<PreferencesStore>()(
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
-        if (state?.theme && state.theme !== 'system') {
-          Appearance.setColorScheme(state.theme);
+        if (state?.theme) {
+          Uniwind.setTheme(state.theme);
         }
       },
     }

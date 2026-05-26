@@ -153,7 +153,7 @@ export default function ResetPasswordScreen() {
               <Text className="text-2xl font-bold text-foreground tracking-tight">
                 Set new password
               </Text>
-              <Text className="text-default-500 text-sm text-center">
+              <Text className="text-muted text-sm text-center">
                 Choose a strong password for your account.
               </Text>
             </View>

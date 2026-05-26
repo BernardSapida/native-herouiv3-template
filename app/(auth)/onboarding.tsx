@@ -84,7 +84,7 @@ export default function OnboardingScreen() {
       {/* Skip */}
       <View className="flex-row justify-end px-4 pt-2">
         <Pressable onPress={finish} hitSlop={12} className="py-2 px-3">
-          <Text className="text-default-500 text-sm font-medium">Skip</Text>
+          <Text className="text-muted text-sm font-medium">Skip</Text>
         </Pressable>
       </View>
 
@@ -117,7 +117,7 @@ export default function OnboardingScreen() {
               <Text className="text-2xl font-bold text-foreground text-center">
                 {item.title}
               </Text>
-              <Text className="text-default-500 text-center text-base leading-6">
+              <Text className="text-muted text-center text-base leading-6">
                 {item.description}
               </Text>
             </View>

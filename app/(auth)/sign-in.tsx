@@ -123,7 +123,7 @@ export default function SignInScreen() {
               <Text className="text-2xl font-bold text-foreground tracking-tight">
                 My App
               </Text>
-              <Text className="text-default-500 text-sm">
+              <Text className="text-muted text-sm">
                 Track your money, live your life
               </Text>
             </View>
@@ -210,7 +210,7 @@ export default function SignInScreen() {
                 )}
               </Button>
               <View className="flex-row justify-center gap-1">
-                <Text className="text-sm text-default-500">
+                <Text className="text-sm text-muted">
                   Don't have an account?
                 </Text>
                 <Pressable onPress={() => router.push("/(auth)/sign-up")}>

@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { ChevronRight, KeyRound, Pencil, Trash2 } from "lucide-react-native";
+import { ChevronRight, KeyRound, Moon, Pencil, Sun, SunMoon, Trash2 } from "lucide-react-native";
 import { Button, Card } from "heroui-native";
 import { useThemeColor } from "heroui-native";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -7,7 +7,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { Screen } from "@/components/ui/Screen";
 import { signOut as signOutApi } from "@/features/auth/api";
 import logger from "@/lib/logger";
-import { useAuthStore } from "@/store";
+import { useAuthStore, usePreferencesStore, type Theme } from "@/store";
 
 function initials(firstname: string, lastname: string) {
   return `${firstname.charAt(0)}${lastname.charAt(0)}`.toUpperCase();
@@ -21,7 +21,7 @@ type MenuRowProps = {
 };
 
 function MenuRow({ label, icon, onPress, destructive }: MenuRowProps) {
-  const [border] = useThemeColor(["border"]);
+  const [muted] = useThemeColor(["muted"]);
   return (
     <Pressable
       onPress={onPress}
@@ -36,15 +36,22 @@ function MenuRow({ label, icon, onPress, destructive }: MenuRowProps) {
       >
         {label}
       </Text>
-      <ChevronRight size={18} className="text-default-400" />
+      <ChevronRight size={18} color={muted} />
     </Pressable>
   );
 }
 
+const THEME_OPTIONS: { value: Theme; label: string; Icon: typeof Sun }[] = [
+  { value: "light", label: "Light", Icon: Sun },
+  { value: "dark", label: "Dark", Icon: Moon },
+  { value: "system", label: "System", Icon: SunMoon },
+];
+
 export default function ProfileScreen() {
   const router = useRouter();
   const { session, clearAuth, token } = useAuthStore();
-  const [accent] = useThemeColor(["accent"]);
+  const { theme, setTheme } = usePreferencesStore();
+  const [accent, muted, accentForeground, danger] = useThemeColor(["accent", "muted", "accent-foreground", "danger"]);
 
   const user = session?.user;
 
@@ -58,7 +65,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <Screen>
+    <Screen noTopInset>
       <ScrollView
         contentContainerStyle={{ padding: 24, gap: 20 }}
         showsVerticalScrollIndicator={false}
@@ -77,7 +84,7 @@ export default function ProfileScreen() {
               <Text className="text-lg font-semibold text-foreground">
                 {user ? `${user.firstname} ${user.lastname}` : ""}
               </Text>
-              <Text className="text-sm text-default-500">{user?.email}</Text>
+              <Text className="text-sm text-muted">{user?.email}</Text>
             </View>
           </Card.Body>
         </Card>
@@ -99,10 +106,48 @@ export default function ProfileScreen() {
             <View className="h-px bg-border" />
             <MenuRow
               label="Delete Account"
-              icon={<Trash2 size={18} className="text-danger" />}
+              icon={<Trash2 size={18} color={danger} />}
               onPress={() => router.push("/(app)/profile/delete-account")}
               destructive
             />
+          </Card.Body>
+        </Card>
+
+        {/* Appearance */}
+        <Card>
+          <Card.Body className="px-4 py-4 gap-3">
+            <Text className="text-sm font-medium text-muted">Appearance</Text>
+            <View className="flex-row gap-2">
+              {THEME_OPTIONS.map(({ value, label, Icon }) => {
+                const active = theme === value;
+                return (
+                  <Pressable
+                    key={value}
+                    onPress={() => setTheme(value)}
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      paddingVertical: 10,
+                      borderRadius: 12,
+                      gap: 6,
+                      backgroundColor: active ? accent : undefined,
+                    }}
+                    className={active ? "" : "bg-default"}
+                  >
+                    <Icon
+                      size={18}
+                      color={active ? accentForeground : muted}
+                    />
+                    <Text
+                      style={{ color: active ? accentForeground : muted }}
+                      className="text-xs font-medium"
+                    >
+                      {label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
           </Card.Body>
         </Card>
 

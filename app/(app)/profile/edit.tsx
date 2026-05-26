@@ -65,7 +65,7 @@ export default function EditProfileScreen() {
   };
 
   return (
-    <Screen>
+    <Screen noTopInset>
       <AlertDialog
         isOpen={showSuccess}
         onOpenChange={setShowSuccess}

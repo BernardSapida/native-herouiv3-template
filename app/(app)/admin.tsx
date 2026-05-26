@@ -11,7 +11,7 @@ export default function AdminScreen() {
       >
         <View>
           <Text className="text-2xl font-bold text-foreground">Admin</Text>
-          <Text className="text-default-500 mt-2">
+          <Text className="text-muted mt-2">
             Replace this screen with your admin dashboard.
           </Text>
         </View>

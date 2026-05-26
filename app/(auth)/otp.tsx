@@ -138,7 +138,7 @@ export default function OtpScreen() {
               <Text className="text-2xl font-bold text-foreground tracking-tight">
                 Check your email
               </Text>
-              <Text className="text-default-500 text-sm text-center">
+              <Text className="text-muted text-sm text-center">
                 We sent a 6-digit code to{" "}
                 <Text className="text-foreground font-medium">{email}</Text>
               </Text>
@@ -179,7 +179,7 @@ export default function OtpScreen() {
               )}
 
               <View className="flex-row justify-center items-center gap-1">
-                <Text className="text-sm text-default-500">
+                <Text className="text-sm text-muted">
                   Didn't receive a code?
                 </Text>
                 <Pressable onPress={handleResend} disabled={countdown > 0}>

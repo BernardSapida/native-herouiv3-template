@@ -11,7 +11,7 @@ export default function ReportsScreen() {
       >
         <View>
           <Text className="text-2xl font-bold text-foreground">Reports</Text>
-          <Text className="text-default-500 mt-2">
+          <Text className="text-muted mt-2">
             Replace this screen with your moderator reports view.
           </Text>
         </View>

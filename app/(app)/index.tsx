@@ -1,7 +1,5 @@
 import { Button, Card } from "heroui-native";
-import { User } from "lucide-react-native";
-import { useRouter } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 import { Screen } from "@/components/ui/Screen";
 import { useLogout } from "@/features/auth/mutations";
@@ -9,8 +7,7 @@ import { useAuthStore } from "@/store";
 
 export default function HomeScreen() {
   const { session } = useAuthStore();
-  const router = useRouter();
-  const logout = useLogout();
+const logout = useLogout();
 
   return (
     <Screen>
@@ -19,24 +16,15 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header row */}
-        <View className="flex-row items-start justify-between">
-          <View className="flex-1">
-            <Text className="text-2xl font-bold text-foreground">
-              {session?.user.firstname
-                ? `Hello, ${session.user.firstname} 👋`
-                : "Hello 👋"}
-            </Text>
-            <Text className="text-default-500 mt-2">
-              Your foundation is ready. Start building.
-            </Text>
-          </View>
-          <Pressable
-            onPress={() => router.push("/(app)/profile")}
-            className="w-10 h-10 rounded-full bg-default-100 items-center justify-center mt-1"
-            hitSlop={8}
-          >
-            <User size={20} className="text-foreground" />
-          </Pressable>
+        <View>
+          <Text className="text-2xl font-bold text-foreground">
+            {session?.user.firstname
+              ? `Hello, ${session.user.firstname} 👋`
+              : "Hello 👋"}
+          </Text>
+          <Text className="text-muted mt-2">
+            Your foundation is ready. Start building.
+          </Text>
         </View>
 
         {/* Placeholder content card */}

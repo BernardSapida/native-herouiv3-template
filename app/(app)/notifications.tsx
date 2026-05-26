@@ -9,7 +9,7 @@ export default function NotificationsScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text className="text-2xl font-bold text-foreground">Notifications</Text>
-        <Text className="text-base text-default-500 leading-relaxed">
+        <Text className="text-base text-muted leading-relaxed">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip

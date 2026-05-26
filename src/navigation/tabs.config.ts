@@ -1,4 +1,4 @@
-﻿import { Activity, Bell, Compass, Flag, Home, Shield } from "lucide-react-native";
+import { Bell, Compass, Flag, Home, Plus, Shield, User } from "lucide-react-native";
 import type { ComponentType } from "react";
 
 export type TabConfig = {
@@ -16,8 +16,9 @@ const ROLE_EXTRAS: Record<string, TabConfig[]> = {
   moderator: [{ name: "reports", label: "Reports", Icon: Flag }],
   user: [
     { name: "explore", label: "Explore", Icon: Compass },
+    { name: "create", label: "Create", Icon: Plus },
     { name: "notifications", label: "Notifications", Icon: Bell },
-    { name: "activity", label: "Activity", Icon: Activity },
+    { name: "profile", label: "Profile", Icon: User },
   ],
 };
 

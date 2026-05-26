@@ -24,7 +24,7 @@ export default function SettingsScreen() {
       >
         {/* Appearance */}
         <View className="gap-3">
-          <Text className="text-xs font-semibold text-default-500 uppercase tracking-widest px-1">
+          <Text className="text-xs font-semibold text-muted uppercase tracking-widest px-1">
             Appearance
           </Text>
           <Card>
@@ -50,7 +50,7 @@ export default function SettingsScreen() {
 
         {/* Language */}
         <View className="gap-3">
-          <Text className="text-xs font-semibold text-default-500 uppercase tracking-widest px-1">
+          <Text className="text-xs font-semibold text-muted uppercase tracking-widest px-1">
             Language
           </Text>
           <Card>

@@ -75,7 +75,7 @@ export default function ForgotPasswordScreen() {
               <Text className="text-2xl font-bold text-foreground tracking-tight">
                 Forgot password?
               </Text>
-              <Text className="text-default-500 text-sm text-center">
+              <Text className="text-muted text-sm text-center">
                 Enter your email and we'll send you a code to reset your password.
               </Text>
             </View>

@@ -1,14 +1,14 @@
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { Screen } from "@/components/ui/Screen";
 
-export default function ActivityScreen() {
+export default function CreateScreen() {
   return (
     <Screen>
       <ScrollView
         contentContainerStyle={{ padding: 24, paddingTop: 32, gap: 16 }}
         showsVerticalScrollIndicator={false}
       >
-        <Text className="text-2xl font-bold text-foreground">Activity</Text>
+        <Text className="text-2xl font-bold text-foreground">Create</Text>
         <Text className="text-base text-muted leading-relaxed">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad

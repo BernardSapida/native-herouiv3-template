@@ -117,7 +117,7 @@ export default function SignUpScreen() {
               <Text className="text-2xl font-bold text-foreground tracking-tight">
                 Create account
               </Text>
-              <Text className="text-default-500 text-sm">
+              <Text className="text-muted text-sm">
                 Sign up to get started
               </Text>
             </View>
@@ -261,7 +261,7 @@ export default function SignUpScreen() {
                 )}
               </Button>
               <View className="flex-row justify-center gap-1">
-                <Text className="text-sm text-default-500">
+                <Text className="text-sm text-muted">
                   Already have an account?
                 </Text>
                 <Pressable onPress={() => router.back()}>

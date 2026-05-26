@@ -72,7 +72,7 @@ export default function ChangePasswordScreen() {
   };
 
   return (
-    <Screen>
+    <Screen noTopInset>
       <AlertDialog
         isOpen={showSuccess}
         onOpenChange={setShowSuccess}

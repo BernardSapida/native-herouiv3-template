@@ -56,7 +56,7 @@ export default function AccountLockedScreen() {
             <Text className="text-2xl font-bold text-foreground tracking-tight text-center">
               Account Locked
             </Text>
-            <Text className="text-default-500 text-sm text-center">
+            <Text className="text-muted text-sm text-center">
               {reason
                 ? reason
                 : "Your account has been locked. Please contact support for assistance."}
