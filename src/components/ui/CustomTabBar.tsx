@@ -1,11 +1,10 @@
-import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { LinearGradient } from "expo-linear-gradient";
-import { useColorScheme } from "react-native";
-import { Pressable, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useThemeColor } from "heroui-native";
 import { getTabsForRole } from "@/navigation/tabs.config";
 import { useAuthStore } from "@/store";
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { LinearGradient } from "expo-linear-gradient";
+import { useThemeColor } from "heroui-native";
+import { Pressable, useColorScheme, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Hardcoded hex because expo-linear-gradient doesn't parse oklch.
 // Derived from theme --accent: oklch(0.6204 0.195 253.83)
@@ -20,7 +19,11 @@ export function CustomTabBar({
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const role = useAuthStore((s) => s.session?.user.role ?? "user");
-  const [background, surface, muted] = useThemeColor(["background", "surface", "muted"]);
+  const [background, surface, muted] = useThemeColor([
+    "background",
+    "surface",
+    "muted",
+  ]);
 
   const visibleNames = new Set(getTabsForRole(role).map((t) => t.name));
   const visibleRoutes = state.routes.filter((r) => visibleNames.has(r.name));
@@ -31,8 +34,8 @@ export function CustomTabBar({
     <View
       style={{
         backgroundColor: background,
-        paddingHorizontal: 20,
-        paddingBottom: insets.bottom + 10,
+        paddingHorizontal: 16,
+        paddingBottom: insets.bottom + 8,
         paddingTop: 8,
       }}
     >
@@ -40,8 +43,8 @@ export function CustomTabBar({
         style={{
           flexDirection: "row",
           backgroundColor: surface,
-          borderRadius: 28,
-          height: 62,
+          borderRadius: 16,
+          height: 64,
           alignItems: "center",
           shadowColor: "#000000",
           shadowOffset: { width: 0, height: 8 },
@@ -71,7 +74,14 @@ export function CustomTabBar({
               <Pressable
                 key={route.key}
                 onPress={onPress}
-                style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+                accessibilityLabel={options.title ?? route.name}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: true }}
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <LinearGradient
                   colors={gradientColors}
@@ -80,7 +90,7 @@ export function CustomTabBar({
                   style={{
                     width: 48,
                     height: 48,
-                    borderRadius: 14,
+                    borderRadius: 12,
                     alignItems: "center",
                     justifyContent: "center",
                   }}
@@ -99,7 +109,14 @@ export function CustomTabBar({
             <Pressable
               key={route.key}
               onPress={onPress}
-              style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+              accessibilityLabel={options.title ?? route.name}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: false }}
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               {options.tabBarIcon?.({
                 color: muted,
