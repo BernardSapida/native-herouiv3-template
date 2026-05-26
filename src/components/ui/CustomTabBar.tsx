@@ -1,15 +1,11 @@
 import { getTabsForRole } from "@/navigation/tabs.config";
 import { useAuthStore } from "@/store";
+import { BRAND } from "@/theme";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { LinearGradient } from "expo-linear-gradient";
 import { useThemeColor } from "heroui-native";
 import { Pressable, useColorScheme, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-// Hardcoded hex because expo-linear-gradient doesn't parse oklch.
-// Derived from theme --accent: oklch(0.6204 0.195 253.83)
-const GRADIENT_LIGHT: [string, string] = ["#7BADFF", "#3B6FEA"];
-const GRADIENT_DARK: [string, string] = ["#5B8FF5", "#2A5DD8"];
 
 export function CustomTabBar({
   state,
@@ -28,7 +24,7 @@ export function CustomTabBar({
   const visibleNames = new Set(getTabsForRole(role).map((t) => t.name));
   const visibleRoutes = state.routes.filter((r) => visibleNames.has(r.name));
   const gradientColors =
-    colorScheme === "dark" ? GRADIENT_DARK : GRADIENT_LIGHT;
+    colorScheme === "dark" ? BRAND.gradientDark : BRAND.gradientLight;
 
   return (
     <View
