@@ -30,6 +30,8 @@ cd android
 .\gradlew stop
 .\gradlew clean
 
+npx expo run:android
+
 /android/build.gradle
 ext {
     ndkVersion = "30.0.14904198"
